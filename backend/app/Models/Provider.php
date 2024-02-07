@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Provider extends Model
 {
@@ -21,4 +22,12 @@ class Provider extends Model
         'provider_name',
         'logo_path'
     ];
+
+    /**
+     * The medias that belong to the provider.
+     */
+    public function medias(): BelongsToMany
+    {
+        return $this->belongsToMany(Media::class);
+    }
 }

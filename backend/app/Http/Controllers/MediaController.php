@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+ini_set('max_execution_time', 1800); //30 minutes
 use App\Models\Genre;
 use App\Models\Media;
 use App\Models\Provider;
@@ -16,58 +17,84 @@ class MediaController extends Controller
     public function index()
     {
         $client = new \GuzzleHttp\Client();
+        // $this->getGenre();
+        // $this->getProvider();
+        die();
+        for ($i = 351; $i <= 500; $i++) {
+            $response = $client->request('GET', 'http://api.themoviedb.org/3/movie/popular?language=fr-FR&page=' . $i, [
+                'headers' => [
+                    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTc4ZTQ0ZGQzZTJkNTQ2OWEzMzY0ZTYzMDUwNzJhNSIsInN1YiI6IjY1NGJhNThiNDFhNTYxMzM2ODg1ZWU0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.56ySPH5oZXFU3X1fbVinWQ4KajECgrRcrKjPq1nwIzA',
+                    'accept' => 'application/json',
+                ],
+            ]);
 
-        $response = $client->request('GET', 'http://api.themoviedb.org/3/movie/popular?language=fr-FR&page=1', [
+            $body = $response->getBody()->getContents();
+
+            $medias = json_decode($body)->results;
+            // var_dump($medias);
+            // die();
+
+            foreach ($medias as $media) {
+                $dataQuery = [
+                    "original_title" => $media->original_title,
+                    "title" => $media->title,
+                    "overview" => $media->overview,
+                    "release_date" => $media->release_date,
+                    "provider_vote_average" => $media->vote_average,
+                    "provider_vote_count" => $media->vote_count,
+                    "poster_path" => $media->backdrop_path ?? ''
+                ];
+                Media::create($dataQuery);
+                $wp = $this->getWatchProvidersFromMedia($media->id);
+                $wpIds = [];
+                if (isset($wp->FR)) {
+                    foreach ($wp->FR as $wp_type) {
+                        if (is_array($wp_type)) {
+                            foreach ($wp_type as $provider) {
+                                $db_id_provider = Provider::where('provider_id', $provider->provider_id)->first()->id;
+                                if (!in_array($db_id_provider, $wpIds)) {
+                                    $wpIds[] = $db_id_provider;
+                                }
+                            }
+                        }
+                    }
+                }
+                $media_id = Media::where('title', $media->title)->first()->id;
+                $mediaModel = Media::findOrFail($media_id);
+                $mediaModel->providers()->attach($wpIds);
+                $id_db_genre = [];
+                foreach ($media->genre_ids as $genre_id) {
+                    $id_db_genre[] = Genre::where('provider_id', $genre_id)->first()->id;
+                }
+                $mediaModel->genres()->attach($id_db_genre);
+                // dump($media->id);
+                // dump($media_id);
+                // dump($wpIds);
+            }
+            dump($i);
+            dump($media_id);
+        }
+    }
+
+    public function getWatchProvidersFromMedia(int $id)
+    {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://api.themoviedb.org/3/movie/' . strval($id) . '/watch/providers', [
             'headers' => [
                 'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTc4ZTQ0ZGQzZTJkNTQ2OWEzMzY0ZTYzMDUwNzJhNSIsInN1YiI6IjY1NGJhNThiNDFhNTYxMzM2ODg1ZWU0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.56ySPH5oZXFU3X1fbVinWQ4KajECgrRcrKjPq1nwIzA',
                 'accept' => 'application/json',
             ],
         ]);
 
-        $body = $response->getBody()->getContents();
-
-        $medias = json_decode($body)->results;
-        // var_dump(json_decode($body)->results);
-
-        foreach($medias as $media){
-            $this->getWatchProvidersFromMedia($media->id);
-        }
-        // $this->getProvider();
-        // $this->getGenre(); 
-        
-        // $dataQuery = [
-        //     "original_title" => $medias->original_title,
-        //     "title" => $medias->title,
-        //     "overview" => $medias->overview,
-        //     "release_date" => $medias->release_date,
-        //     "provider_vote_average" => $medias->vote_average,
-        //     "provider_vote_count" => $medias->vote_count,
-        //     "poster_path" => $medias->backdrop_path
-        // ];
-
-        // Media::create($dataQuery);
-    }
-
-    public function getWatchProvidersFromMedia(int $id)
-    {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', 'http://api.themoviedb.org/3/movie/'.strval($id).'/watch/providers', [
-            'headers' => [
-              'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTc4ZTQ0ZGQzZTJkNTQ2OWEzMzY0ZTYzMDUwNzJhNSIsInN1YiI6IjY1NGJhNThiNDFhNTYxMzM2ODg1ZWU0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.56ySPH5oZXFU3X1fbVinWQ4KajECgrRcrKjPq1nwIzA',
-              'accept' => 'application/json',
-            ],
-        ]);
-
-        dump(json_decode($response->getBody()->getContents())->results);
-
+        return json_decode($response->getBody()->getContents())->results;
     }
     public function getGenre()
     {
         $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', 'http://api.themoviedb.org/3/genre/movie/list?language=fr', [
             'headers' => [
-              'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTc4ZTQ0ZGQzZTJkNTQ2OWEzMzY0ZTYzMDUwNzJhNSIsInN1YiI6IjY1NGJhNThiNDFhNTYxMzM2ODg1ZWU0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.56ySPH5oZXFU3X1fbVinWQ4KajECgrRcrKjPq1nwIzA',
-              'accept' => 'application/json',
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTc4ZTQ0ZGQzZTJkNTQ2OWEzMzY0ZTYzMDUwNzJhNSIsInN1YiI6IjY1NGJhNThiNDFhNTYxMzM2ODg1ZWU0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.56ySPH5oZXFU3X1fbVinWQ4KajECgrRcrKjPq1nwIzA',
+                'accept' => 'application/json',
             ],
         ]);
 
@@ -92,9 +119,6 @@ class MediaController extends Controller
 
         $providers = json_decode($response->getBody()->getContents())->results;
         foreach ($providers as $provider) {
-            // var_dump($provider->provider_name);
-            // var_dump($provider->provider_id);
-            // var_dump($provider->logo_path);
             Provider::create([
                 'provider_id' => $provider->provider_id,
                 'provider_name' => $provider->provider_name,

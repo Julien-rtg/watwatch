@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Genre extends Model
 {
@@ -25,4 +26,12 @@ class Genre extends Model
         'provider_id',
         'content'
     ];
+
+    /**
+     * The media that belong to the genre.
+     */
+    public function media(): BelongsToMany
+    {
+        return $this->belongsToMany(Media::class);
+    }
 }

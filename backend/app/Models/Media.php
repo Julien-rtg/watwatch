@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Media extends Model
 {
@@ -24,5 +25,19 @@ class Media extends Model
         'poster_path'
     ];
 
+    /**
+     * The providers that belong to the media.
+     */
+    public function providers(): BelongsToMany
+    {
+        return $this->belongsToMany(Provider::class);
+    }
     
+    /**
+     * The genre that belong to the media.
+     */
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class, 'media_genre');
+    }
 }
