@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\ProviderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +29,9 @@ Route::prefix("media")->group(function() {
     Route::delete("/{id}", [MediaController::class, 'destroy']);
     // Route::middleware("auth:sanctum")->group(function() {
     // });
+
+});
+Route::prefix("provider")->group(function() {
+    Route::get("/", [ProviderController::class, 'index']);
 
 });
