@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Questionnaire
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  @switch (navigationState[navigationStateIndex]) {
+    @case ('plateform') {
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Sélectionner vos plateformes</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+    
+            @for (provider of providers; track provider.id) {
+              <ion-item>
+                <ion-thumbnail slot="start">
+                  <img alt="Silhouette of mountains" [src]="'https://image.tmdb.org/t/p/original'+provider.logo_path" />
+                </ion-thumbnail>
+                <ion-checkbox (click)="appendPlatform(provider)">{{provider.provider_name}}</ion-checkbox>
+              </ion-item>
+            }
+      
+          </ion-list>  
+        </ion-card-content>
+      </ion-card>
+  
+    }
+    @case ('genre') {
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Sélectionner vos genres</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+    
+            @for (genre of genres; track genre.id) {
+              <ion-item>
+                <ion-checkbox (click)="appendGenre(genre)">{{genre.content}}</ion-checkbox>
+              </ion-item>
+            }
+      
+          </ion-list>  
+        </ion-card-content>
+      </ion-card>
+  
+    }
+  }
+
+</ion-content>

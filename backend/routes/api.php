@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProviderController;
 use Illuminate\Http\Request;
@@ -33,5 +34,7 @@ Route::prefix("media")->group(function() {
 });
 Route::prefix("provider")->group(function() {
     Route::get("/", [ProviderController::class, 'index']);
-
+});
+Route::prefix("genre")->group(function() {
+    Route::get("/", [GenreController::class, 'index']);
 });
