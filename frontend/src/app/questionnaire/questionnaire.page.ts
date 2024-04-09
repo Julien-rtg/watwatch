@@ -51,12 +51,7 @@ export class QuestionnairePage {
   getMediaByGenresAndProviders() {
     console.log('selectedGenres', this.selectedGenres);
     console.log('selectedPlatforms', this.selectedPlatforms);
-    this.apiMediaService.getMediaByGenresAndProviders(this.selectedGenres, this.selectedPlatforms).subscribe({
-      next: (result: any) => {
-        console.log(result);
-      },
-      error: (err: any) => {},
-    });
+    this.apiMediaService.getMediaByGenresAndProviders(this.selectedGenres, this.selectedPlatforms);
   }
 
   appendPlatform(provider: any) {

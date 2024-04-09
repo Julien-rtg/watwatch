@@ -6,6 +6,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Config } from 'src/app/config/config';
+import { QuestionnaireService } from '../questionnaire.service';
 
 @Injectable()
 export class ApiMediaService {
@@ -13,7 +14,7 @@ export class ApiMediaService {
 
   public httpOptions;
 
-  public constructor(private http: HttpClient, private config: Config) {
+  public constructor(private http: HttpClient, private config: Config, public questionnaireService: QuestionnaireService) {
     this.apiUrl = config.getApiUrl();
     this.httpOptions = {
       headers: new HttpHeaders({
@@ -32,7 +33,7 @@ export class ApiMediaService {
       .pipe(catchError(this.handleError))
       .subscribe({
         next: (media: any) => {
-          data.next(media);
+          this.questionnaireService.setMedia(media);
         },
       });
 
