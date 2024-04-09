@@ -28,9 +28,8 @@ Route::prefix("media")->group(function() {
     Route::post("/", [MediaController::class, 'store']);
     Route::put("/{id}", [MediaController::class, 'update']);
     Route::delete("/{id}", [MediaController::class, 'destroy']);
-    // Route::middleware("auth:sanctum")->group(function() {
-    // });
 
+    Route::post("/getMediaByGenreAndProvider", [MediaController::class, 'getMediaByGenreAndProvider']);
 });
 Route::prefix("provider")->group(function() {
     Route::get("/", [ProviderController::class, 'index']);

@@ -26,7 +26,7 @@ class Provider extends Model
     /**
      * The medias that belong to the provider.
      */
-    public function medias(): BelongsToMany
+    public function media(): BelongsToMany
     {
         return $this->belongsToMany(Media::class);
     }

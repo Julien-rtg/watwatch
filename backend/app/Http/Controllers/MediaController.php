@@ -7,7 +7,6 @@ use App\Models\Genre;
 use App\Models\Media;
 use App\Models\Provider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class MediaController extends Controller
 {
@@ -17,6 +16,36 @@ class MediaController extends Controller
     public function index()
     {
 
+    }
+
+    public function getMediaByGenreAndProvider(Request $request)
+    {
+        $medias_id_genre = [];
+        foreach ($request->genres as $genre) {
+            $genresFounded = Genre::findOrFail($genre)->media->pluck('id');
+            foreach ($genresFounded as $media) {
+                if(in_array($media, $medias_id_genre)) {
+                    continue;
+                }
+                array_push($medias_id_genre, $media);
+            }
+        }
+
+        $medias_id_provider = [];
+        foreach ($request->providers as $provider) {
+            $providersFounded = Provider::findOrFail($provider)->media->pluck('id');
+            foreach ($providersFounded as $media) {
+                if(in_array($media, $medias_id_provider)) {
+                    continue;
+                }
+                array_push($medias_id_provider, $media);
+            }
+        }
+
+        $medias_id = array_intersect($medias_id_genre, $medias_id_provider);
+
+        $medias = Media::find($medias_id);
+        dd($medias);
     }
 
     /**

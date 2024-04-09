@@ -22,6 +22,23 @@ export class ApiMediaService {
     };
   }
 
+  getMediaByGenresAndProviders(
+    genres: any,
+    providers: any
+  ): Observable<any> {
+    let data = new Subject();
+    this.http
+      ?.post(`${this.apiUrl}media/getMediaByGenreAndProvider`, { genres, providers })
+      .pipe(catchError(this.handleError))
+      .subscribe({
+        next: (media: any) => {
+          data.next(media);
+        },
+      });
+
+    return data.asObservable();
+  }
+
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);
   }

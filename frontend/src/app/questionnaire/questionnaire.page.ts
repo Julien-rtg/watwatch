@@ -3,6 +3,7 @@ import { ApiProviderService } from '../services/api/api-provider.service';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { ApiGenreService } from '../services/api/api-genre.service';
 import { Router } from '@angular/router';
+import { ApiMediaService } from '../services/api/api-media.service';
 
 @Component({
   selector: 'app-tab1',
@@ -20,6 +21,7 @@ export class QuestionnairePage {
   constructor(
     providerService: ApiProviderService,
     genreService: ApiGenreService,
+    public apiMediaService: ApiMediaService,
     questionnaireService: QuestionnaireService,
     route: Router
   ) {
@@ -38,41 +40,48 @@ export class QuestionnairePage {
     });
 
     effect(() => {
-      console.log(questionnaireService.emitQuestionnaireNav());
       this.navigationStateIndex = questionnaireService.emitQuestionnaireNav();
-      if(this.navigationStateIndex === 2){
-
+      if (this.navigationStateIndex === 2) {
         route.navigateByUrl('tabs/media');
-        questionnaireService.setQuestionnaireMedia([{'platform':this.selectedPlatforms, 'genres':this.selectedGenres}]);
+        this.getMediaByGenresAndProviders();
       }
     });
   }
 
-  
+  getMediaByGenresAndProviders() {
+    console.log('selectedGenres', this.selectedGenres);
+    console.log('selectedPlatforms', this.selectedPlatforms);
+    this.apiMediaService.getMediaByGenresAndProviders(this.selectedGenres, this.selectedPlatforms).subscribe({
+      next: (result: any) => {
+        console.log(result);
+      },
+      error: (err: any) => {},
+    });
+  }
 
   appendPlatform(provider: any) {
-    const index = this.selectedPlatforms.findIndex((platform: any) => platform.id === provider.id);
+    const index = this.selectedPlatforms.findIndex(
+      (platform: any) => platform.id === provider.id
+    );
     if (index === -1) {
-      this.selectedPlatforms.push(provider);
+      this.selectedPlatforms.push(provider.id);
     } else {
       this.selectedPlatforms.splice(index, 1);
     }
     console.log(this.selectedPlatforms);
-    
   }
 
   appendGenre(genre: any) {
-    const index = this.selectedGenres.findIndex((platform: any) => platform.id === genre.id);
+    const index = this.selectedGenres.findIndex(
+      (platform: any) => platform.id === genre.id
+    );
     if (index === -1) {
-      this.selectedGenres.push(genre);
+      this.selectedGenres.push(genre.id);
     } else {
       this.selectedGenres.splice(index, 1);
     }
     console.log(this.selectedGenres);
-    
   }
-
-
 
   handleChange(ev: any) {
     console.log('Current value:', JSON.stringify(ev.target.value));
