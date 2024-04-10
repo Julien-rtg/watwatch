@@ -8,4 +8,30 @@
 
 <ion-content class="content-background" [fullscreen]="true">
 
+  @for (media of medias; track media.id) {
+    <ion-card>
+      <img alt="Silhouette of mountains" [src]="'https://image.tmdb.org/t/p/original'+media.poster_path" />
+      <ion-card-header>
+        <ion-card-title>{{ media.title }}</ion-card-title>
+        <ion-card-subtitle>{{ media.author }}</ion-card-subtitle>
+      </ion-card-header>
+    
+      <ion-card-content>
+        {{ media.overview | slice:0:130}}...
+      </ion-card-content>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" class="yellow">
+          </ion-item>
+          <div class="ion-padding yellow" slot="content">
+            <p>df</p>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </ion-card>
+  } @empty {
+    <p>Aucun médias trouvé</p>
+  }
+
 </ion-content>

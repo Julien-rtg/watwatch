@@ -45,6 +45,8 @@ class MediaController extends Controller
         $medias_id = array_intersect($medias_id_genre, $medias_id_provider);
 
         $medias = Media::find($medias_id);
+        $medias->load('providers');
+        $medias->load('genres');
         $medias = $medias->take(20);
         return response()->json($medias);
     }

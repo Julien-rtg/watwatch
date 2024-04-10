@@ -7,12 +7,12 @@ import { QuestionnaireService } from '../services/questionnaire.service';
   styleUrls: ['media.page.scss'],
 })
 export class MediaPage {
-  media: any = [];
+  medias: any = [];
   
   public constructor(public questionnaireService: QuestionnaireService) {
     effect(() => {
-      this.media = questionnaireService.emitMedia();
-      console.log(this.media);
+      this.medias = questionnaireService.emitMedia();
+      console.log(this.medias);
     });
   }
 
