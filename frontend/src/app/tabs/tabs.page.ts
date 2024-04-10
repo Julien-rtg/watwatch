@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { QuestionnaireService } from '../services/questionnaire.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -7,7 +8,19 @@ import { QuestionnaireService } from '../services/questionnaire.service';
   styleUrls: ['tabs.page.scss'],
 })
 export class TabsPage {
-  constructor(public questionnaireService: QuestionnaireService) {}
+  navigationIndex: number = 0;
+  currentRoute: string = '';
+
+  constructor(public questionnaireService: QuestionnaireService, private router: Router) {
+    effect(() => {
+      this.navigationIndex = this.questionnaireService.emitQuestionnaireNav();
+    });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.url;
+      }
+    });
+  }
 
   triggerNav(value: string) {
     if (value === 'back') {
@@ -20,4 +33,9 @@ export class TabsPage {
       );
     }
   }
+
+  resetNav() {
+    this.questionnaireService.setQuestionnaireNav(0);
+  }
+  
 }

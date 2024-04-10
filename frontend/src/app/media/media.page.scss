@@ -1,0 +1,15 @@
+.toolbar-background {
+  --background: transparent;
+  backdrop-filter: blur(20px);
+}
+.header-ios ion-toolbar:last-of-type {
+  --border-width: 0;
+}
+
+.title-size {
+  font-size: 20px;
+}
+
+.content-background {
+  --background: linear-gradient(1800deg, rgba(245,83,38,1) 0%, rgba(239,216,104,1) 100%);
+}

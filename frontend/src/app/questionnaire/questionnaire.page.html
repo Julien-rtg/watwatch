@@ -1,18 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
+<ion-header>
+  <ion-toolbar class="toolbar-background">
+    <ion-title class="title-size">
       Questionnaire
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="content-background" [fullscreen]="true">
 
   @switch (navigationState[navigationStateIndex]) {
     @case ('plateform') {
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>Sélectionner vos plateformes</ion-card-subtitle>
+          <ion-card-subtitle class="white-text size ion-text-center">Sélectionner vos plateformes</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-list>
@@ -34,7 +34,7 @@
     @case ('genre') {
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>Sélectionner vos genres</ion-card-subtitle>
+          <ion-card-subtitle class="white-text size ion-text-center">Sélectionner vos genres</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-list>
