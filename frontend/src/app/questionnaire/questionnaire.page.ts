@@ -72,6 +72,7 @@ export class QuestionnairePage {
     } else {
       this.selectedPlatforms.splice(index, 1);
     }
+    this.questionnaireService.emitProviders.set(this.selectedPlatforms);
     console.log(this.selectedPlatforms);
   }
 
@@ -84,6 +85,7 @@ export class QuestionnairePage {
     } else {
       this.selectedGenres.splice(index, 1);
     }
+    this.questionnaireService.emitGenres.set(this.selectedGenres);
     console.log(this.selectedGenres);
   }
 

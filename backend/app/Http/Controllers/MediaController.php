@@ -18,6 +18,9 @@ class MediaController extends Controller
 
     }
 
+    /**
+     * Get media by genre and provider with pagination.
+     */
     public function getMediaByGenreAndProvider(Request $request)
     {
         $medias_id_genre = [];
@@ -44,10 +47,10 @@ class MediaController extends Controller
 
         $medias_id = array_intersect($medias_id_genre, $medias_id_provider);
 
-        $medias = Media::find($medias_id);
+        $medias = Media::whereIn('id', $medias_id)->paginate(20);
         $medias->load('providers');
         $medias->load('genres');
-        $medias = $medias->take(20);
+        
         return response()->json($medias);
     }
 

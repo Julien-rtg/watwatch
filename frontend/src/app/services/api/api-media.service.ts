@@ -25,11 +25,13 @@ export class ApiMediaService {
 
   getMediaByGenresAndProviders(
     genres: any,
-    providers: any
+    providers: any,
+    fullUrl?: string
   ): Observable<any> {
     let data = new Subject();
+    console.log(fullUrl);
     this.http
-      ?.post(`${this.apiUrl}media/getMediaByGenreAndProvider`, { genres, providers })
+      ?.post((fullUrl ?? `${this.apiUrl}media/getMediaByGenreAndProvider`), { genres, providers })
       .pipe(catchError(this.handleError))
       .subscribe({
         next: (media: any) => {

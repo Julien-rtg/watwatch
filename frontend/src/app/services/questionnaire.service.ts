@@ -4,9 +4,11 @@ import { Injectable, signal } from '@angular/core';
 export class QuestionnaireService {
 
   emitQuestionnaireNav = signal(0);
-  emitMedia = signal('init');
+  emitMedia = signal<any>('init');
   resetQuestionnaire = signal(0);
   resetMedias = signal(0);
+  emitGenres = signal<any>([]);
+  emitProviders = signal<any>([]);
 
   setQuestionnaireNav(value:number){
     this.emitQuestionnaireNav.set(value);

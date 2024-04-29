@@ -65,6 +65,7 @@
       </ion-accordion>
     </ion-accordion-group>
   </ion-card>
+
   } @empty {
     @if (!noMediasFound) {
       <div class="div-circular">
@@ -78,4 +79,12 @@
     <p class="no-medias-found">Aucun média trouvé</p>
   </div>
   }
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreMedia($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="circular"
+      loadingText="Chargement des médias..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
