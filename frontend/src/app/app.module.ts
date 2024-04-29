@@ -12,6 +12,8 @@ import { Config } from './config/config';
 import { HttpClientModule } from '@angular/common/http';
 import { QuestionnaireService } from './services/questionnaire.service';
 import { ApiGenreService } from './services/api/api-genre.service';
+import { IonRatingStarsModule } from 'ion-rating-stars';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +22,7 @@ import { ApiGenreService } from './services/api/api-genre.service';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    IonRatingStarsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

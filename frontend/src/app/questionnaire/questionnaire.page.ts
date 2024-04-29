@@ -22,7 +22,7 @@ export class QuestionnairePage {
     providerService: ApiProviderService,
     genreService: ApiGenreService,
     public apiMediaService: ApiMediaService,
-    questionnaireService: QuestionnaireService,
+    public questionnaireService: QuestionnaireService,
     route: Router
   ) {
     providerService.getProviders().subscribe({
@@ -46,17 +46,26 @@ export class QuestionnairePage {
         this.getMediaByGenresAndProviders();
       }
     });
+    effect(() => {
+      if (questionnaireService.resetQuestionnaire()) {
+        this.selectedGenres = [];
+        this.selectedPlatforms = [];
+      }
+    });
   }
 
   getMediaByGenresAndProviders() {
     console.log('selectedGenres', this.selectedGenres);
     console.log('selectedPlatforms', this.selectedPlatforms);
-    this.apiMediaService.getMediaByGenresAndProviders(this.selectedGenres, this.selectedPlatforms);
+    this.apiMediaService.getMediaByGenresAndProviders(
+      this.selectedGenres,
+      this.selectedPlatforms
+    );
   }
 
   appendPlatform(provider: any) {
     const index = this.selectedPlatforms.findIndex(
-      (platform: any) => platform.id === provider.id
+      (val: any) => val === provider.id
     );
     if (index === -1) {
       this.selectedPlatforms.push(provider.id);
@@ -68,7 +77,7 @@ export class QuestionnairePage {
 
   appendGenre(genre: any) {
     const index = this.selectedGenres.findIndex(
-      (platform: any) => platform.id === genre.id
+      (val: any) => val === genre.id
     );
     if (index === -1) {
       this.selectedGenres.push(genre.id);

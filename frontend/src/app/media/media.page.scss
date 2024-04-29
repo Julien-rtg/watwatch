@@ -11,9 +11,55 @@
 }
 
 .content-background {
+  --offset-top: 44px !important;
   --background: linear-gradient(1800deg, rgba(239,216,104,1) 0%, rgba(245,83,38,1) 100%);
 }
 
 .yellow {
   --background: #efd868;
+}
+
+.genre-text {
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.genre-content-text {
+  color: white;
+  font-size: 14px;
+}
+
+.text-overview {
+  margin-bottom: 0.5rem;
+}
+
+.sizeLogoProvider {
+  width: 50px;
+  height: 50px;
+}
+
+.release_date {
+  margin-top: 1rem;
+}
+.div-circular {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+ion-spinner {
+  width: 200px;
+  height: 200px;
+}
+
+.no-medias-found {
+  font-size: 30px;
+}
+.div-no-medias-found {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

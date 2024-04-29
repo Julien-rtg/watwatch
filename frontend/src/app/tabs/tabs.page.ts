@@ -36,6 +36,7 @@ export class TabsPage {
 
   resetNav() {
     this.questionnaireService.setQuestionnaireNav(0);
+    this.questionnaireService.resetQuestion();
   }
   
 }

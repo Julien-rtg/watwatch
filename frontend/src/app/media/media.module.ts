@@ -6,6 +6,7 @@ import { MediaPage } from './media.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { MediaPageRoutingModule } from './media-routing.module';
+import { IonRatingStarsModule } from 'ion-rating-stars';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { MediaPageRoutingModule } from './media-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    MediaPageRoutingModule
+    MediaPageRoutingModule,
+    IonRatingStarsModule,
   ],
   declarations: [MediaPage]
 })

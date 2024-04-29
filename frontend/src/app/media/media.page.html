@@ -1,37 +1,81 @@
 <ion-header>
   <ion-toolbar class="toolbar-background">
-    <ion-title class="title-size">
-      Liste des médias
-    </ion-title>
+    <ion-title class="title-size"> Liste des médias </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="content-background" [fullscreen]="true">
+  @for (media of medias; track media.id; let i = $index) {
+  <ion-card>
+    <img
+      alt="Silhouette of mountains"
+      [src]="'https://image.tmdb.org/t/p/original'+media.poster_path"
+    />
+    <ion-card-header>
+      <ion-card-title>{{ media.title }}</ion-card-title>
+      <ion-card-subtitle>{{ media.author }}</ion-card-subtitle>
+    </ion-card-header>
 
-  @for (media of medias; track media.id) {
-    <ion-card>
-      <img alt="Silhouette of mountains" [src]="'https://image.tmdb.org/t/p/original'+media.poster_path" />
-      <ion-card-header>
-        <ion-card-title>{{ media.title }}</ion-card-title>
-        <ion-card-subtitle>{{ media.author }}</ion-card-subtitle>
-      </ion-card-header>
-    
-      <ion-card-content>
-        {{ media.overview | slice:0:130}}...
-      </ion-card-content>
+    <ion-card-content>
+      <p class="genre-text">
+        Genres : @for (genre of media.genres; track genre.id; let last = $last)
+        {
+        <span class="genre-content-text">{{ genre.content }}</span>
+        @if (!last) {
+        <span>, </span>
+        } }
+      </p>
 
-      <ion-accordion-group>
-        <ion-accordion value="first">
-          <ion-item slot="header" class="yellow">
-          </ion-item>
-          <div class="ion-padding yellow" slot="content">
-            <p>df</p>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
-    </ion-card>
+      @if (media.seeMore) {
+      <p class="text-overview">{{ media.overview }}</p>
+      <span (click)="toggleDescription(i)">Voir moins</span>
+      } @else {
+      <p class="text-overview">{{ media.overview | slice:0:130 }}...</p>
+      <span (click)="toggleDescription(i)">Voir plus...</span>
+      }
+
+      <p class="release_date">Date de sortie : {{ media.release_date | date: 'dd-MM-yyyy' }}</p>
+    </ion-card-content>
+
+    <ion-accordion-group>
+      <ion-accordion value="first">
+        <ion-item slot="header" class="yellow"> </ion-item>
+        <div class="ion-padding yellow" slot="content">
+          @for (plateforme of media.providers; track plateforme.id) {
+          <img
+            class="sizeLogoProvider"
+            [src]="'https://image.tmdb.org/t/p/original'+plateforme.logo_path"
+            [alt]="plateforme.provider_name"
+          />
+          }
+
+          <p>Nombres de votes : {{ media.provider_vote_count }}</p>
+          <ion-rating-stars
+            [rating]="media.provider_vote_average"
+            [color]="'darkgrey'"
+            [filledColor]="'orange'"
+            [margin]="2"
+            [size]="20"
+            [disabled]="false"
+            [opacity]="0.5"
+            [isHalfStar]="true"
+            >
+          </ion-rating-stars>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-card>
   } @empty {
-    <p>Aucun médias trouvé</p>
+    @if (!noMediasFound) {
+      <div class="div-circular">
+        <ion-spinner name="circular"></ion-spinner>
+      </div>
+    }
   }
 
+  @if (noMediasFound) {
+  <div class="div-no-medias-found">
+    <p class="no-medias-found">Aucun média trouvé</p>
+  </div>
+  }
 </ion-content>
